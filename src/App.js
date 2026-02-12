@@ -13,31 +13,29 @@ function App() {
   const validateForm = () => {
     let tempErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    const passRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    
     if (!formData.username) {
       tempErrors.username = "Email is required";
     } else if (!emailRegex.test(formData.username)) {
       tempErrors.username = "Invalid email format";
     }
-
+    
     if (!formData.password) {
       tempErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      tempErrors.password = "Password must be at least 6 characters";
+    } else if (!passRegex.test(formData.password)) {
+      tempErrors.password = "Password invalid format";
     }
-
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
-
   const handleSubmit = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     if (validateForm()) {
       console.log("Form Submitted Successfully:", formData);
       alert("Login Success!");
     }
   };
-
   return (
     <div className="App">
       <div className="header">
@@ -55,28 +53,28 @@ function App() {
 
           <form onSubmit={handleSubmit}>
             <h2>Login</h2>
-            <div className="form1">
-              <label htmlFor="username">Email address*</label>
-              <input 
-                className="sign" 
-                type="text" 
-                name="username" 
-                value={formData.username} 
-                onChange={handleChange} 
-                placeholder="Email" 
+            <div className="form-a">
+              <label htmlFor="username">Phone/Email address*</label>
+              <input
+                className="sign"
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="Email"
               />
-              {errors.username && <p style={{color: 'red', fontSize: '12px', margin: '0'}}>{errors.username}</p>}
+              {errors.username && <p style={{ color: 'red', fontSize: '12px', margin: '0' }}>{errors.username}</p>}
 
               <label htmlFor="password">Password*</label>
-              <input 
-                className="sign" 
-                type="password" 
-                name="password" 
-                value={formData.password} 
-                onChange={handleChange} 
-                placeholder="Password" 
+              <input
+                className="sign"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
               />
-              {errors.password && <p style={{color: 'red', fontSize: '12px', margin: '0'}}>{errors.password}</p>}
+              {errors.password && <p style={{ color: 'red', fontSize: '12px', margin: '0' }}>{errors.password}</p>}
             </div>
 
             <button className="sign" type="submit">Sign In</button>
