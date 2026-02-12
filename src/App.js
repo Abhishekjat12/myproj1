@@ -1,44 +1,91 @@
-
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [errors, setErrors] = useState({});
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(e.target)
+    setFormData({ ...formData, [name]: value });
+    if (errors[name]) setErrors({ ...errors, [name]: "" });
+  };
+  const validateForm = () => {
+    let tempErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!formData.username) {
+      tempErrors.username = "Email is required";
+    } else if (!emailRegex.test(formData.username)) {
+      tempErrors.username = "Invalid email format";
+    }
+
+    if (!formData.password) {
+      tempErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      tempErrors.password = "Password must be at least 6 characters";
+    }
+
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); 
+    if (validateForm()) {
+      console.log("Form Submitted Successfully:", formData);
+      alert("Login Success!");
+    }
+  };
+
   return (
     <div className="App">
       <div className="header">
-        <div className="boxmodel1">
-        <div className='boxmodel'>
-          <div className='abhi'>
-        <h1>Welcome!</h1>
-        <p>Create your account for free</p>
-        </div>
-        <div/>
-        <div className='abhi2'>
-
-        <button className="sign"type="Sign Up">Sign Up</button>
-        </div>
-      </div>
-      
-        <form>
-          <h2>Login</h2>
-          <div className="form1">
-           
-            <label htmlFor="username" required>Username/Email address*</label>
-            
-            <input className="sign" type="text" id="username or Email" name="username" required />
-         
-            <label htmlFor="password">Password*</label>
-            <input className="sign" type="password" id="password" name="password" required />
+        <div className="box-model-a">
+          <div className='box-model'>
+            <div className='abhi'>
+              <h1>Welcome!</h1>
+              <p>Create your account for free</p>
+            </div>
+            <div />
+            <div className='sign-a'>
+              <button className="sign" type="button">Sign Up</button>
+            </div>
           </div>
-          <button className="sign" type="submit">Sign Up</button>
-          
-          <a className="forgot" href="https://www.google.com" target="_blank">Forgot password?</a>
-        </form>
+
+          <form onSubmit={handleSubmit}>
+            <h2>Login</h2>
+            <div className="form1">
+              <label htmlFor="username">Email address*</label>
+              <input 
+                className="sign" 
+                type="text" 
+                name="username" 
+                value={formData.username} 
+                onChange={handleChange} 
+                placeholder="Email" 
+              />
+              {errors.username && <p style={{color: 'red', fontSize: '12px', margin: '0'}}>{errors.username}</p>}
+
+              <label htmlFor="password">Password*</label>
+              <input 
+                className="sign" 
+                type="password" 
+                name="password" 
+                value={formData.password} 
+                onChange={handleChange} 
+                placeholder="Password" 
+              />
+              {errors.password && <p style={{color: 'red', fontSize: '12px', margin: '0'}}>{errors.password}</p>}
+            </div>
+
+            <button className="sign" type="submit">Sign In</button>
+            <a className="forgot" href="https://www.google.com" target="_blank" rel="noreferrer">Forgot password?</a>
+          </form>
+        </div>
       </div>
     </div>
-    </div>
-  
   );
-
 }
 
 export default App;
